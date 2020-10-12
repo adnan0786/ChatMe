@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="messageImage"
+            type="String" />
+
+        <variable
+            name="message"
+            type="com.example.chatme.MessageModel" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgMessageImage"
+            imageUrl="@{messageImage}"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignBottom="@+id/leftLayout"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_launcher_background" />
+
+
+        <LinearLayout
+            android:id="@+id/leftLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/imgMessageImage"
+            android:background="@drawable/left_side_background"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/txtMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="250dp"
+                android:singleLine="false"
+                android:text="@{message.message}"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="@{message.type.equals(`text`)?View.VISIBLE:View.GONE}" />
+
+            <ImageView
+                imageChat="@{message.message}"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_launcher_background"
+                android:visibility="@{message.type.equals(`text`)?View.GONE:View.VISIBLE}" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

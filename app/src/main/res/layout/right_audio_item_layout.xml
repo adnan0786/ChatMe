@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="messageImage"
+            type="String" />
+
+        <variable
+            name="message"
+            type="com.example.chatme.MessageModel" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgMessageImage"
+            imageUrl="@{messageImage}"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignBottom="@id/rightLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="2dp"
+            android:src="@drawable/ic_launcher_background" />
+
+        <RelativeLayout
+            android:id="@+id/rightLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@+id/imgMessageImage"
+            android:padding="5dp">
+
+            <me.jagar.chatvoiceplayerlibrary.VoicePlayerView
+                android:id="@+id/voicePlayerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:enableVisualizer="true"
+                app:playPauseBackgroundColor="@color/colorPrimary"
+                app:playPauseCornerRadius="100"
+                app:playProgressbarColor="@color/colorPrimary"
+                app:progressTimeColor="@color/black"
+                app:seekBarProgressColor="#000"
+                app:seekBarThumbColor="@color/colorPrimary"
+                app:shareCornerRadius="100"
+                app:showShareButton="false"
+                app:showTiming="true"
+                app:viewBackground="@color/edittextColor"
+                app:viewCornerRadius="10"
+                app:visualizationNotPlayedColor="@color/colorPrimary"
+                app:visualizationPlayedColor="@color/colorPrimary" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>
