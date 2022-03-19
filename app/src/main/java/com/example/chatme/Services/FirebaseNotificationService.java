@@ -32,26 +32,43 @@ import java.util.Random;
 
 public class FirebaseNotificationService extends FirebaseMessagingService {
 
-    private Util util = new Util();
-
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
 
         if (remoteMessage.getData().size() > 0) {
             Map<String, String> map = remoteMessage.getData();
-            String title = map.get("title");
-            String message = map.get("message");
-            String hisID = map.get("hisID");
-            String hisImage = map.get("hisImage");
-            String chatID = map.get("chatID");
 
-            Log.d("TAG", "onMessageReceived: chatID is " + chatID + "\n hisID" + hisID);
+            String type = map.get("type");
+            if (type != null && type.equals("group")) {
+                Log.d("TAG", "onMessageReceived: Group Notification");
 
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
-                createOreoNotification(title, message, hisID, hisImage, chatID);
-            else
-                createNormalNotification(title, message, hisID, hisImage, chatID);
+                String title = map.get("title");
+                String message = map.get("message");
+                String groupId = map.get("groupId");
+
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
+                    createGroupOreoNotification(title, message, groupId);
+                else
+                    createGroupNormalNotification(title, message, groupId);
+
+            } else {
+
+                Log.d("TAG", "onMessageReceived: Chat Notification");
+
+                String title = map.get("title");
+                String message = map.get("message");
+                String hisID = map.get("hisID");
+                String hisImage = map.get("hisImage");
+                String chatID = map.get("chatID");
+
+                Log.d("TAG", "onMessageReceived: chatID is " + chatID + "\n hisID" + hisID);
+
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
+                    createOreoNotification(title, message, hisID, hisImage, chatID);
+                else
+                    createNormalNotification(title, message, hisID, hisImage, chatID);
+            }
         } else Log.d("TAG", "onMessageReceived: no data ");
 
 
@@ -69,7 +86,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         if (firebaseAuth.getCurrentUser() != null) {
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(util.getUID());
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getUid());
             Map<String, Object> map = new HashMap<>();
             map.put("token", token);
             databaseReference.updateChildren(map);
@@ -133,4 +150,61 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         manager.notify(100, notification);
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createGroupOreoNotification(String title, String message, String groupID) {
+
+        NotificationChannel channel = new NotificationChannel(AllConstants.CHANNEL_ID, "Message", NotificationManager.IMPORTANCE_HIGH);
+        channel.setShowBadge(true);
+        channel.enableLights(true);
+        channel.enableVibration(true);
+        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(channel);
+
+//        Intent intent = new Intent(this, MessageActivity.class);
+//        intent.putExtra("hisID", hisID);
+//        intent.putExtra("hisImage", hisImage);
+//        intent.putExtra("chatID", chatID);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        Notification notification = new Notification.Builder(this, AllConstants.CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+//                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .build();
+        manager.notify(100, notification);
+
+    }
+
+    private void createGroupNormalNotification(String title, String message, String groupId) {
+
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, AllConstants.CHANNEL_ID);
+        builder.setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setAutoCancel(true)
+                .setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
+                .setSound(uri);
+
+//        Intent intent = new Intent(this, MessageActivity.class);
+//        intent.putExtra("chatID", chatID);
+//        intent.putExtra("hisID", hisID);
+//        intent.putExtra("hisImage", hisImage);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+//        builder.setContentIntent(pendingIntent);
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(new Random().nextInt(85 - 65), builder.build());
+
+    }
+
 }

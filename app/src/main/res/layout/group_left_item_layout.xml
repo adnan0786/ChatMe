@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="groupMessage"
+            type="com.example.chatme.GroupMessageModel" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/left_side_background"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@{groupMessage.name}"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:maxWidth="250dp"
+                android:singleLine="false"
+                android:text="@{groupMessage.message}"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:visibility="@{groupMessage.type.equals(`text`)?View.VISIBLE:View.GONE}" />
+
+            <ImageView
+                imageChat="@{groupMessage.message}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:maxWidth="200dp"
+                android:maxHeight="200dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/group_3"
+                android:visibility="@{groupMessage.type.equals(`image`)?View.VISIBLE:View.GONE}" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

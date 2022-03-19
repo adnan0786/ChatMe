@@ -8,6 +8,14 @@
         app:cnb_backgroundColor="@color/colorAccent"
         app:cnb_iconColor="@color/colorPrimary"
         app:cnb_textColor="@color/colorPrimary" />
+
+    <item
+        android:id="@+id/group"
+        android:icon="@drawable/ic_group"
+        android:title="Group"
+        app:cnb_backgroundColor="@color/colorAccent"
+        app:cnb_iconColor="@color/colorPrimary"
+        app:cnb_textColor="@color/colorPrimary" />
     <item
         android:id="@+id/contacts"
         android:icon="@drawable/ic_contacts"

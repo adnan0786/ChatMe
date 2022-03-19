@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="userModel"
+            type="com.example.chatme.UserModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgMember"
+            imageUrl="@{userModel.image}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/txtMemberName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/imgMember"
+            android:text="@{userModel.name,default=`Name`}"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtMemberStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtMemberName"
+            android:layout_alignStart="@+id/txtMemberName"
+            android:text="@{userModel.status,default=`Status`}"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:text="Group Admin"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:visibility="@{userModel.typing.equals(`admin`)?View.VISIBLE:View.GONE}" />
+
+    </RelativeLayout>
+</layout>

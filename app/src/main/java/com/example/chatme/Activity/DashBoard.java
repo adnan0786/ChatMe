@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chatme.Fragment.ChatFragment;
 import com.example.chatme.Fragment.ContactFragment;
+import com.example.chatme.Fragment.GroupFragment;
 import com.example.chatme.Fragment.ProfileFragment;
 import com.example.chatme.R;
 import com.example.chatme.Utils.Util;
@@ -16,7 +17,7 @@ import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 public class DashBoard extends AppCompatActivity {
 
     private ChipNavigationBar navigationBar;
-    private Fragment fragment = null;
+    Fragment fragment = null;
     private Util util;
 
     @Override
@@ -25,7 +26,7 @@ public class DashBoard extends AppCompatActivity {
         setContentView(R.layout.activity_dash_board);
         util = new Util();
         navigationBar = findViewById(R.id.navigationChip);
-        
+
         if (savedInstanceState == null) {
             navigationBar.setItemSelected(R.id.chat, true);
             getSupportFragmentManager().beginTransaction().replace(R.id.dashboardContainer, new ChatFragment()).commit();
@@ -45,6 +46,8 @@ public class DashBoard extends AppCompatActivity {
                     case R.id.profile:
                         fragment = new ProfileFragment();
                         break;
+                    case R.id.group:
+                        fragment = new GroupFragment();
                 }
 
                 if (fragment != null)

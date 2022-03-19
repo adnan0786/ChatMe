@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -61,6 +62,7 @@ public class ProfileFragment extends Fragment {
         sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE).edit();
         permissions = new Permissions();
         profileViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(ProfileViewModel.class);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Profile");
 
         Observer<UserModel> observer = new Observer<UserModel>() {
             @Override

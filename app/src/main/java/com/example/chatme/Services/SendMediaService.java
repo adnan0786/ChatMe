@@ -10,13 +10,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.chatme.GroupMessageModel;
 import com.example.chatme.MessageModel;
 import com.example.chatme.R;
 import com.example.chatme.Utils.Util;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -33,9 +37,9 @@ public class SendMediaService extends Service {
 
     private NotificationCompat.Builder builder;
     private NotificationManager manager;
-    private String hisID, chatID;
+    private String hisID, chatID, groupId;
     private int MAX_PROGRESS;
-    private com.example.chatme.Utils.Util util = new Util();
+    private final com.example.chatme.Utils.Util util = new Util();
     private ArrayList<String> images;
 
 
@@ -52,8 +56,6 @@ public class SendMediaService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-        hisID = intent.getStringExtra("hisID");
-        chatID = intent.getStringExtra("chatID");
         images = intent.getStringArrayListExtra("media");
         MAX_PROGRESS = images.size();
 
@@ -62,14 +64,25 @@ public class SendMediaService extends Service {
 
         startForeground(100, getNotification().build());
 
-        for (int a = 0; a < images.size(); a++) {
+        if (intent.hasExtra("type")) {
 
-            String fileName = compressImage(images.get(a));
-            uploadImage(fileName);
-            builder.setProgress(MAX_PROGRESS, a + 1, false);
-            manager.notify(600, builder.build());
+            groupId = intent.getStringExtra("groupId");
+            sendGroupImage();
+        } else {
 
+            hisID = intent.getStringExtra("hisID");
+            chatID = intent.getStringExtra("chatID");
+
+            for (int a = 0; a < images.size(); a++) {
+
+                String fileName = compressImage(images.get(a));
+                uploadImage(fileName);
+                builder.setProgress(MAX_PROGRESS, a + 1, false);
+                manager.notify(600, builder.build());
+
+            }
         }
+
 
         builder.setContentTitle("Sending Completed")
                 .setProgress(0, 0, false);
@@ -133,6 +146,47 @@ public class SendMediaService extends Service {
                         databaseReference.push().setValue(messageModel);
                     }
                 });
+            }
+        });
+    }
+
+    private void sendGroupImage() {
+
+        for (int a = 0; a < images.size(); a++) {
+
+            String fileName = compressImage(images.get(a));
+
+            uploadGroupImage(fileName);
+            builder.setProgress(MAX_PROGRESS, a + 1, false);
+            manager.notify(600, builder.build());
+        }
+    }
+
+    private void uploadGroupImage(String fileName) {
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference(groupId + "/Media/Images/"
+                + util.getUID() + "/" + System.currentTimeMillis());
+        Uri uri = Uri.fromFile(new File(fileName));
+        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> image = taskSnapshot.getStorage().getDownloadUrl();
+                image.addOnCompleteListener(task -> {
+
+                    if (task.isSuccessful()) {
+                        String url = task.getResult().toString();
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Group Message")
+                                .child(groupId);
+                        GroupMessageModel messageModel = new GroupMessageModel("image", url,
+                                String.valueOf(System.currentTimeMillis()), util.getUID());
+
+                        reference.push().setValue(messageModel);
+
+
+                    }
+
+                });
+
             }
         });
     }

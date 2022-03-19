@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/btnAddMember"
+        android:title="Add Member" />
+
+
+    <item
+        android:id="@+id/btnGroupInfo"
+        android:title="Group Info" />
+
+
+    <item
+        android:id="@+id/btnExitGroup"
+        android:title="Exit Group" />
+
+
+    <item
+        android:id="@+id/btnDeleteGroup"
+        android:title="Delete Group" />
+</menu>

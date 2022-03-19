@@ -14,6 +14,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -75,7 +77,7 @@ import me.jagar.chatvoiceplayerlibrary.VoicePlayerView;
 
 public class MessageActivity extends AppCompatActivity {
 
-    private ActivityMessageBinding binding;
+    ActivityMessageBinding binding;
     private String hisID, hisImage, myID, chatID = null, myImage, myName, audioPath;
     private Util util;
     private DatabaseReference databaseReference;
@@ -169,7 +171,13 @@ public class MessageActivity extends AppCompatActivity {
 //                else
 //                    hideLayout();
 
-                getGalleryImage();
+                if (chatID != null) {
+
+                    getGalleryImage();
+                } else {
+                    Toast.makeText(MessageActivity.this, "Send text message first", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -408,7 +416,7 @@ public class MessageActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private void updateTypingStatus(String status) {
+    void updateTypingStatus(String status) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(myID);
         Map<String, Object> map = new HashMap<>();
         map.put("typing", status);
@@ -550,6 +558,8 @@ public class MessageActivity extends AppCompatActivity {
                     else startService(intent);
                 }
 
+            }else{
+                Toast.makeText(this, "No image select", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -609,11 +619,17 @@ public class MessageActivity extends AppCompatActivity {
 
         binding.recordButton.setOnClickListener(view -> {
 
-            if (permissions.isRecordingOk(MessageActivity.this))
-                if (permissions.isStorageOk(MessageActivity.this))
-                    binding.recordButton.setListenForRecord(true);
-                else permissions.requestStorage(MessageActivity.this);
-            else permissions.requestRecording(MessageActivity.this);
+            if (chatID != null) {
+
+                if (permissions.isRecordingOk(MessageActivity.this))
+                    if (permissions.isStorageOk(MessageActivity.this))
+                        binding.recordButton.setListenForRecord(true);
+                    else permissions.requestStorage(MessageActivity.this);
+                else permissions.requestRecording(MessageActivity.this);
+            } else {
+                Toast.makeText(MessageActivity.this, "Send text message first", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
         binding.recordView.setOnRecordListener(new OnRecordListener() {
@@ -687,9 +703,8 @@ public class MessageActivity extends AppCompatActivity {
                     file.delete();
 
 
-
                 binding.recordView.setVisibility(View.GONE);
-                binding.recyclerViewMessage.setVisibility(View.VISIBLE);
+                binding.dataLayout.setVisibility(View.VISIBLE);
             }
         });
     }

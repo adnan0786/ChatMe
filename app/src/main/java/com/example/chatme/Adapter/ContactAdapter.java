@@ -28,7 +28,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     private Context context;
     private ArrayList<UserModel> arrayList, filterArrayList;
-    private ContactItemLayoutBinding binding;
 
 
     public ContactAdapter(Context context, ArrayList<UserModel> arrayList) {
@@ -42,7 +41,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        binding = DataBindingUtil.inflate(LayoutInflater.from(context),
+        ContactItemLayoutBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context),
                 R.layout.contact_item_layout, parent, false);
 
 

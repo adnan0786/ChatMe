@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="groupMessage"
+            type="com.example.chatme.GroupMessageModel" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <RelativeLayout
+            android:id="@+id/leftLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:padding="5dp">
+
+            <me.jagar.chatvoiceplayerlibrary.VoicePlayerView
+                android:id="@+id/voicePlayerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:enableVisualizer="true"
+                app:playPauseBackgroundColor="@color/colorPrimary"
+                app:playPauseCornerRadius="100"
+                app:playProgressbarColor="@color/colorPrimary"
+                app:progressTimeColor="@color/black"
+                app:seekBarProgressColor="#000"
+                app:seekBarThumbColor="@color/colorPrimary"
+                app:shareCornerRadius="100"
+                app:showShareButton="false"
+                app:showTiming="true"
+                app:viewBackground="@color/edittextColor"
+                app:viewCornerRadius="10"
+                app:visualizationNotPlayedColor="@color/colorPrimary"
+                app:visualizationPlayedColor="@color/colorPrimary" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

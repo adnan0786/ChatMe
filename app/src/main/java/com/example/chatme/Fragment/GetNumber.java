@@ -2,6 +2,7 @@ package com.example.chatme.Fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,13 +135,17 @@ public class GetNumber extends Fragment {
                 @Override
                 public void onVerificationFailed(FirebaseException e) {
 
-                    if (e instanceof FirebaseAuthInvalidCredentialsException)
+                    if (e instanceof FirebaseAuthInvalidCredentialsException){
+
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    else if (e instanceof FirebaseTooManyRequestsException)
+                        Log.d("TAG", "onVerificationFailed: "+e.getMessage());
+
+                    } else if (e instanceof FirebaseTooManyRequestsException)
                         Toast.makeText(getContext(), "The SMS quota for the project has been exceeded ", Toast.LENGTH_LONG).show();
 
 
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d("TAG", "onVerificationFailed: "+e.getMessage());
                     binding.progressLayout.setVisibility(View.GONE);
                     binding.progressBar.stop();
 

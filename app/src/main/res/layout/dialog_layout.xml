@@ -14,7 +14,6 @@
         android:inputType="text|textCapSentences"
         android:padding="10dp"
         android:textColor="@color/colorPrimary"
-        android:textColorHint="@color/colorPrimary"
         android:textSize="15dp"
         android:textStyle="bold" />
 

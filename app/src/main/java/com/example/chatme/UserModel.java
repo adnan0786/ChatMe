@@ -2,6 +2,7 @@ package com.example.chatme;
 
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
@@ -91,12 +92,12 @@ public class UserModel {
     }
 
     @BindingAdapter("imageUrl")
-    public static void loadImage(CircleImageView view, String image) {
+    public static void loadImage(@NonNull CircleImageView view, @NonNull String image) {
         Glide.with(view.getContext()).load(image).into(view);
     }
 
     @BindingAdapter("imageChat")
-    public static void loadImage(ImageView view, String image) {
+    public static void loadImage(@NonNull ImageView view, @NonNull String image) {
 
         Glide.with(view.getContext()).load(image).into(view);
 
